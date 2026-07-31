@@ -1,33 +1,65 @@
-local tasks = require("tasks")
-
 local M = {}
+
+local function current_project()
+	return require("esp.project").current()
+end
 
 function M.build()
 	vim.cmd.make()
 end
 
 function M.flash()
-	tasks.run("idf.py flash")
+	local project = current_project()
+	if not project then
+		vim.notify("ESP-IDF project not detected", vim.log.levels.WARN)
+		return
+	end
+	project:flash()
 end
 
 function M.monitor()
-	tasks.run("idf.py monitor")
+	local project = current_project()
+	if not project then
+		vim.notify("ESP-IDF project not detected", vim.log.levels.WARN)
+		return
+	end
+	project:monitor()
 end
 
 function M.clean()
-	tasks.run("idf.py fullclean")
+	local project = current_project()
+	if not project then
+		vim.notify("ESP-IDF project not detected", vim.log.levels.WARN)
+		return
+	end
+	project:clean()
 end
 
 function M.menuconfig()
-	tasks.run("idf.py menuconfig")
+	local project = current_project()
+	if not project then
+		vim.notify("ESP-IDF project not detected", vim.log.levels.WARN)
+		return
+	end
+	project:menuconfig()
 end
 
 function M.erase_flash()
-	tasks.run("idf.py erase-flash")
+	local project = current_project()
+	if not project then
+		vim.notify("ESP-IDF project not detected", vim.log.levels.WARN)
+		return
+	end
+	project:erase_flash()
 end
 
 function M.set_target(target)
-	tasks.run("idf.py set-target " .. target)
+	local project = current_project()
+	if not project then
+		vim.notify("ESP-IDF project not detected", vim.log.levels.WARN)
+		return
+	end
+	project:set_target(target)
 end
 
 return M

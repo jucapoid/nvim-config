@@ -1,4 +1,9 @@
-local M = {}
+local State = require("esp.state")
+local Serial = require("esp.serial")
+local Idf = require("esp.idf")
+
+local Project = {}
+Project.__index = Project
 
 local markers = {
 	"sdkconfig",
@@ -6,11 +11,10 @@ local markers = {
 	"CMakeLists.txt",
 }
 
-function M.root(bufnr)
+local function find_root(bufnr)
 	bufnr = bufnr or 0
 
 	local name = vim.api.nvim_buf_get_name(bufnr)
-
 	if name == "" then
 		return nil
 	end
@@ -35,20 +39,65 @@ function M.root(bufnr)
 	return root
 end
 
-function M.is_project(bufnr)
-	return M.root(bufnr) ~= nil
+function Project.new(root)
+	local self = setmetatable({}, Project)
+	self.root = root
+	self.state = State.new(root)
+	self.serial = Serial.new(root, self.state)
+	self.idf = Idf.new(root, self.state, self.serial)
+	return self
 end
 
-function M.setup(bufnr)
-	bufnr = bufnr or 0
-
-	local root = M.root(bufnr)
-
+function Project.current(bufnr)
+	local root = find_root(bufnr)
 	if not root then
-		return
+		return nil
 	end
+	return Project.new(root)
+end
 
+function Project:setup(bufnr)
+	bufnr = bufnr or 0
 	vim.bo[bufnr].makeprg = "idf.py build"
 end
 
-return M
+function Project:build()
+	vim.cmd.make()
+end
+
+function Project:flash()
+	self.idf:flash()
+end
+
+function Project:monitor()
+	self.idf:monitor()
+end
+
+function Project:clean()
+	self.idf:clean()
+end
+
+function Project:menuconfig()
+	self.idf:menuconfig()
+end
+
+function Project:erase_flash()
+	self.idf:erase_flash()
+end
+
+function Project:set_target(target)
+	self.state:set("target", target)
+end
+
+function Project:port()
+	return self.serial:current()
+end
+
+function Project:baud()
+	return self.state:get("baud") or 460800
+end
+
+return {
+	new = Project.new,
+	current = Project.current,
+}
