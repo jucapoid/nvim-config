@@ -20,10 +20,26 @@ map("n", "N", "Nzzzv")
 map("n", "<C-d>", "<C-d>zz")
 map("n", "<C-u>", "<C-u>zz")
 
--- Git
-map("n", "<leader>gg", "<cmd>Git<CR>", { desc = "Git" })
-map("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", { desc = "Diffview" })
-map("n", "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", { desc = "File History" })
-map("n", "<leader>gH", "<cmd>DiffviewFileHistory<CR>", { desc = "Repository History" })
-map("n", "<leader>gc", "<cmd>Git commit<CR>", { desc = "Commit" })
-map("n", "<leader>gb", "<cmd>Git blame<CR>", { desc = "Blame" })
+map("n", "<leader>gg", "<cmd>Git<CR>", {
+	desc = "Git",
+})
+
+map("n", "<leader>gd", "<cmd>DiffviewOpen<CR>", {
+	desc = "Diffview",
+})
+
+map("n", "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", {
+	desc = "File History",
+})
+
+map("n", "<leader>gH", "<cmd>DiffviewFileHistory<CR>", {
+	desc = "Repository History",
+})
+
+map("n", "<leader>gc", "<cmd>Git commit<CR>", {
+	desc = "Commit",
+})
+
+map("n", "<leader>gb", "<cmd>Git blame<CR>", {
+	desc = "Blame",
+})

@@ -1,61 +1,133 @@
 return {
+	{
+		"stevearc/oil.nvim",
 
-  ------------------------------------------------------------------------------
-  -- Telescope
-  ------------------------------------------------------------------------------
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      {
-        "nvim-telescope/telescope-fzf-native.nvim",
-        build = "make",
-      },
-    },
+		opts = {
+			default_file_explorer = true,
 
-    config = function()
-      local telescope = require("telescope")
+			view_options = {
+				show_hidden = true,
+			},
+		},
 
-      telescope.setup({})
+		dependencies = {
+			"nvim-tree/nvim-web-devicons",
+		},
 
-      pcall(telescope.load_extension, "fzf")
-    end,
-  },
+		keys = {
+			{
+				"-",
+				"<cmd>Oil<CR>",
+				desc = "Open parent directory",
+			},
+		},
+	},
 
-  ------------------------------------------------------------------------------
-  -- Oil
-  ------------------------------------------------------------------------------
-  {
-    "stevearc/oil.nvim",
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
+	{
+		"nvim-telescope/telescope.nvim",
 
-    config = function()
-      require("oil").setup()
+		dependencies = {
+			"nvim-lua/plenary.nvim",
 
-      vim.keymap.set("n", "-", "<CMD>Oil<CR>", {
-        desc = "Open parent directory",
-      })
-    end,
-  },
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				build = "make",
+			},
+		},
 
-  ------------------------------------------------------------------------------
-  -- Flash
-  ------------------------------------------------------------------------------
-  {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    opts = {},
-    keys = {
-      {
-        "s",
-        function()
-          require("flash").jump()
-        end,
-        desc = "Flash",
-        mode = { "n", "x", "o" },
-      },
-    },
-  },
+		opts = function()
+			local telescope = require("telescope")
+			local actions = require("telescope.actions")
+
+			telescope.setup({
+				defaults = {
+					layout_strategy = "horizontal",
+
+					sorting_strategy = "ascending",
+
+					layout_config = {
+						prompt_position = "top",
+					},
+
+					mappings = {
+						i = {
+							["<Esc>"] = actions.close,
+						},
+					},
+				},
+
+				extensions = {
+					fzf = {
+						fuzzy = true,
+						override_generic_sorter = true,
+						override_file_sorter = true,
+						case_mode = "smart_case",
+					},
+				},
+			})
+
+			telescope.load_extension("fzf")
+
+			return {}
+		end,
+
+		keys = {
+			{
+				"<leader>ff",
+				function()
+					require("telescope.builtin").find_files()
+				end,
+				desc = "Find Files",
+			},
+			{
+				"<leader>fg",
+				function()
+					require("telescope.builtin").live_grep()
+				end,
+				desc = "Live Grep",
+			},
+			{
+				"<leader>fb",
+				function()
+					require("telescope.builtin").buffers()
+				end,
+				desc = "Buffers",
+			},
+			{
+				"<leader>fh",
+				function()
+					require("telescope.builtin").help_tags()
+				end,
+				desc = "Help",
+			},
+			{
+				"<leader>fr",
+				function()
+					require("telescope.builtin").oldfiles()
+				end,
+				desc = "Recent Files",
+			},
+			{
+				"<leader>fs",
+				function()
+					require("telescope.builtin").lsp_document_symbols()
+				end,
+				desc = "Document Symbols",
+			},
+			{
+				"<leader>fS",
+				function()
+					require("telescope.builtin").lsp_workspace_symbols()
+				end,
+				desc = "Workspace Symbols",
+			},
+			{
+				"<leader>fd",
+				function()
+					require("telescope.builtin").diagnostics()
+				end,
+				desc = "Diagnostics",
+			},
+		},
+	},
 }

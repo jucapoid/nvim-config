@@ -1,8 +1,27 @@
 return {
-  {
-    "folke/which-key.nvim",
-    event = VeryLazy,
+	{
+		"folke/which-key.nvim",
 
-    opts = {},
-  },
+		event = "VeryLazy",
+
+		opts = {
+			preset = "modern",
+
+			delay = 200,
+
+			icons = {
+				mappings = true,
+			},
+
+			spec = {
+				{ "<leader>c", group = "Code" },
+				{ "<leader>d", group = "Debug" },
+				{ "<leader>f", group = "Find" },
+				{ "<leader>g", group = "Git" },
+				{ "<leader>r", group = "Refactor" },
+				{ "<leader>w", group = "Workspace" },
+				{ "<leader>x", group = "Diagnostics" },
+			},
+		},
+	},
 }
