@@ -1,7 +1,11 @@
 local M = {}
 
+local Board = require("esp.board")
+local Status = require("esp.status")
+local Manager = require("esp.manager")
+
 local function current_project()
-	return require("esp.project").current()
+	return Manager.current()
 end
 
 local function with_project(fn)
@@ -51,6 +55,42 @@ end
 function M.set_target(target)
 	with_project(function(project)
 		project:set_target(target)
+	end)
+end
+
+function M.select_board()
+	with_project(function(project)
+		vim.ui.select(Board.names(), {
+			prompt = "Select ESP board",
+		}, function(choice)
+			if not choice then
+				return
+			end
+
+			project:set_board(choice)
+			vim.notify("Board set to " .. choice)
+		end)
+	end)
+end
+
+function M.select_port()
+	with_project(function(project)
+		vim.ui.select(project:ports(), {
+			prompt = "Select ESP serial port",
+		}, function(choice)
+			if not choice then
+				return
+			end
+
+			project:set_port(choice)
+			vim.notify("Port set to " .. choice)
+		end)
+	end)
+end
+
+function M.status()
+	with_project(function(project)
+		Status.show(project)
 	end)
 end
 

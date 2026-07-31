@@ -13,6 +13,18 @@ local boards = {
 local Board = {}
 Board.__index = Board
 
+function Board.names()
+	local names = {}
+
+	for name in pairs(boards) do
+		table.insert(names, name)
+	end
+
+	table.sort(names)
+
+	return names
+end
+
 function Board.new(name)
 	local config = boards[name]
 	if not config then
@@ -31,18 +43,6 @@ end
 
 function Board:baud()
 	return self.config.baud
-end
-
-function Board:names()
-	local names = {}
-
-	for name in pairs(boards) do
-		table.insert(names, name)
-	end
-
-	table.sort(names)
-
-	return names
 end
 
 return Board

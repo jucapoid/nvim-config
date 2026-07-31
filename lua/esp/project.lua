@@ -6,40 +6,6 @@ local Board = require("esp.board")
 local Project = {}
 Project.__index = Project
 
-local markers = {
-	"sdkconfig",
-	"sdkconfig.defaults",
-	"CMakeLists.txt",
-}
-
-local function find_root(bufnr)
-	bufnr = bufnr or 0
-
-	local name = vim.api.nvim_buf_get_name(bufnr)
-	if name == "" then
-		return nil
-	end
-
-	local dir = vim.fs.dirname(name)
-
-	local found = vim.fs.find(markers, {
-		path = dir,
-		upward = true,
-	})[1]
-
-	if not found then
-		return nil
-	end
-
-	local root = vim.fs.dirname(found)
-
-	if vim.fn.isdirectory(root .. "/main") == 0 then
-		return nil
-	end
-
-	return root
-end
-
 function Project.new(root)
 	local self = setmetatable({}, Project)
 
@@ -49,15 +15,6 @@ function Project.new(root)
 	self.idf = Idf.new(self)
 
 	return self
-end
-
-function Project.current(bufnr)
-	local root = find_root(bufnr)
-	if not root then
-		return nil
-	end
-
-	return Project.new(root)
 end
 
 function Project:setup(bufnr)
@@ -103,10 +60,19 @@ function Project:set_board(name)
 		return false
 	end
 
+	self.state:set("board", name)
 	self:set_target(board:target())
 	self:set_baud(board:baud())
 
 	return true
+end
+
+function Project:ports()
+	return self.serial:candidates()
+end
+
+function Project:set_port(port)
+	return self.serial:set(port)
 end
 
 function Project:port()
@@ -117,7 +83,18 @@ function Project:baud()
 	return self.state:get("baud") or 460800
 end
 
+function Project:path(...)
+	return vim.fs.joinpath(self.root, ...)
+end
+
+function Project:exists(...)
+	return vim.uv.fs_stat(self:path(...)) ~= nil
+end
+
+function Project:root_path()
+	return self.root
+end
+
 return {
 	new = Project.new,
-	current = Project.current,
 }
