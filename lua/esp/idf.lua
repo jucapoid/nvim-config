@@ -17,40 +17,38 @@ local function build_command(project, args)
 	end
 
 	vim.list_extend(cmd, args)
+
 	return cmd
 end
 
 local function run(project, args)
-	local cmd = build_command(project, args)
-	require("tasks").run(table.concat(cmd, " "))
+	require("tasks").run(table.concat(build_command(project, args), " "))
 end
 
-function Idf.new(root, state, serial)
+function Idf.new(project)
 	local self = setmetatable({}, Idf)
-	self.root = root
-	self.state = state
-	self.serial = serial
+	self.project = project
 	return self
 end
 
 function Idf:flash()
-	run(self, { "flash" })
+	run(self.project, { "flash" })
 end
 
 function Idf:monitor()
-	run(self, { "monitor" })
+	run(self.project, { "monitor" })
 end
 
 function Idf:clean()
-	run(self, { "fullclean" })
+	run(self.project, { "fullclean" })
 end
 
 function Idf:menuconfig()
-	run(self, { "menuconfig" })
+	run(self.project, { "menuconfig" })
 end
 
 function Idf:erase_flash()
-	run(self, { "erase-flash" })
+	run(self.project, { "erase-flash" })
 end
 
 return Idf

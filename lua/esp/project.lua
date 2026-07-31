@@ -1,6 +1,7 @@
 local State = require("esp.state")
 local Serial = require("esp.serial")
 local Idf = require("esp.idf")
+local Board = require("esp.board")
 
 local Project = {}
 Project.__index = Project
@@ -41,10 +42,12 @@ end
 
 function Project.new(root)
 	local self = setmetatable({}, Project)
+
 	self.root = root
 	self.state = State.new(root)
 	self.serial = Serial.new(root, self.state)
-	self.idf = Idf.new(root, self.state, self.serial)
+	self.idf = Idf.new(self)
+
 	return self
 end
 
@@ -53,6 +56,7 @@ function Project.current(bufnr)
 	if not root then
 		return nil
 	end
+
 	return Project.new(root)
 end
 
@@ -87,6 +91,22 @@ end
 
 function Project:set_target(target)
 	self.state:set("target", target)
+end
+
+function Project:set_baud(baud)
+	self.state:set("baud", baud)
+end
+
+function Project:set_board(name)
+	local board = Board.new(name)
+	if not board then
+		return false
+	end
+
+	self:set_target(board:target())
+	self:set_baud(board:baud())
+
+	return true
 end
 
 function Project:port()
