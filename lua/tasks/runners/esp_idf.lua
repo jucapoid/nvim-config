@@ -3,7 +3,7 @@ local tasks = require("tasks")
 local M = {}
 
 function M.build()
-	tasks.make("idf.py build")
+	vim.cmd.make()
 end
 
 function M.flash()

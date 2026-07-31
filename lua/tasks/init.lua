@@ -34,35 +34,6 @@ function M.run(command)
 	terminal.send(command, M.project_root())
 end
 
-function M.make(command)
-	local cwd = M.project_root()
-
-	terminal.send(command, cwd)
-
-	vim.system(vim.split(command, " "), {
-		cwd = cwd,
-		text = true,
-	}, function(result)
-		vim.schedule(function()
-			local lines = vim.split(result.stdout .. result.stderr, "\n", {
-				plain = true,
-			})
-
-			vim.fn.setqflist({}, " ", {
-				title = command,
-				lines = lines,
-				efm = vim.o.errorformat,
-			})
-
-			if #vim.fn.getqflist() > 0 then
-				vim.cmd("copen")
-			else
-				vim.notify("Build completed successfully")
-			end
-		end)
-	end)
-end
-
 M.terminal = terminal
 
 return M
