@@ -21,18 +21,18 @@ vim.api.nvim_create_autocmd("QuickFixCmdPost", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("BufWinEnter", {
+vim.api.nvim_create_autocmd("FileType", {
 	group = group,
-	pattern = "quickfix",
+	pattern = "qf",
 	callback = function()
 		vim.opt_local.number = false
 		vim.opt_local.relativenumber = false
 		vim.opt_local.signcolumn = "no"
 		vim.opt_local.wrap = false
+		vim.opt_local.buflisted = false
 
-		local opts = { buffer = true, silent = true }
-
-		vim.keymap.set("n", "q", "<cmd>cclose<CR>", opts)
-		vim.keymap.set("n", "<CR>", "<CR><C-w>p", opts)
+		vim.keymap.set("n", "q", "<cmd>cclose<CR>", { buffer = true, silent = true })
+		vim.keymap.set("n", "<CR>", "<CR>", { buffer = true, silent = true })
+		vim.keymap.set("n", "o", "<CR><C-w>p", { buffer = true, silent = true })
 	end,
 })
