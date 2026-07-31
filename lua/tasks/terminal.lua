@@ -40,7 +40,7 @@ local function start_terminal(cwd)
 end
 
 function M.open(cwd)
-	cwd = cwd or state.cwd or vim.loop.cwd()
+	cwd = cwd or state.cwd or vim.uv.cwd()
 
 	if not state.job then
 		start_terminal(cwd)
