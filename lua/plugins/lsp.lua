@@ -17,8 +17,8 @@ return {
 			ensure_installed = {
 				-- Language servers
 				"clangd",
+				"intelephense",
 				"lua-language-server",
-				"phpactor",
 				"pyright",
 
 				-- Formatters
@@ -47,9 +47,9 @@ return {
 				"clangd",
 				"cssls",
 				"html",
+				"intelephense",
 				"jsonls",
 				"lua_ls",
-				"phpactor",
 				"pyright",
 				"ts_ls",
 				"yamlls",

@@ -20,19 +20,20 @@ return {
     config = function()
       require("nvim-treesitter.config").setup({
         ensure_installed = {
-          bash,
-          c,
-          html,
-          javascript,
-          json,
-          lua,
-          markdown,
-          php,
-          python,
-          tsx,
-          typescript,
-          vim,
-          yaml,
+          "bash",
+          "c",
+          "html",
+          "javascript",
+          "json",
+          "lua",
+          "markdown",
+          "php",
+          "python",
+          "tsx",
+          "typescript",
+          "vim",
+          "yaml",
+          "blade",
         },
 
         highlight = {
