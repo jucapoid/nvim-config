@@ -11,6 +11,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		bufmap("gD", vim.lsp.buf.declaration, "Go to Declaration")
 		bufmap("gr", vim.lsp.buf.references, "Go to References")
 		bufmap("gi", vim.lsp.buf.implementation, "Go to Implementation")
+		bufmap("gt", vim.lsp.buf.type_definition, "Go to Type Definition")
 		bufmap("K", vim.lsp.buf.hover, "Hover")
 		bufmap("<leader>cr", vim.lsp.buf.rename, "Rename")
 		bufmap("<leader>ca", vim.lsp.buf.code_action, "Code Action")

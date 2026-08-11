@@ -7,6 +7,22 @@ local function select_close(opts)
 	}
 end
 
+local function current_file_dir()
+	local path = vim.api.nvim_buf_get_name(0)
+	if path == "" then
+		return vim.fn.getcwd()
+	end
+	return vim.fs.dirname(path)
+end
+
+local function telescope_builtin()
+	return require("telescope.builtin")
+end
+
+local function telescope_lsp()
+	return require("config.telescope_lsp")
+end
+
 return {
 	{
 		"stevearc/oil.nvim",
@@ -132,10 +148,9 @@ return {
 			},
 		},
 
-		opts = function()
+		config = function()
 			local telescope = require("telescope")
 			local actions = require("telescope.actions")
-			local builtin = require("telescope.builtin")
 
 			telescope.setup({
 				defaults = {
@@ -171,66 +186,150 @@ return {
 			})
 
 			telescope.load_extension("fzf")
-
-			return {
-				keys = {
-					{
-						"<leader>ff",
-						builtin.find_files,
-						desc = "Find Files",
-					},
-					{
-						"<leader>fg",
-						builtin.live_grep,
-						desc = "Live Grep",
-					},
-					{
-						"<leader>fb",
-						builtin.buffers,
-						desc = "Buffers",
-					},
-					{
-						"<leader>fr",
-						builtin.oldfiles,
-						desc = "Recent Files",
-					},
-					{
-						"<leader>fh",
-						builtin.help_tags,
-						desc = "Help",
-					},
-					{
-						"<leader>fc",
-						builtin.commands,
-						desc = "Commands",
-					},
-					{
-						"<leader>fk",
-						builtin.keymaps,
-						desc = "Keymaps",
-					},
-					{
-						"<leader>fs",
-						builtin.lsp_document_symbols,
-						desc = "Document Symbols",
-					},
-					{
-						"<leader>fS",
-						builtin.lsp_workspace_symbols,
-						desc = "Workspace Symbols",
-					},
-					{
-						"<leader>fd",
-						builtin.diagnostics,
-						desc = "Diagnostics",
-					},
-					{
-						"<leader>fw",
-						builtin.grep_string,
-						desc = "Find Word Under Cursor",
-					},
-				},
-			}
 		end,
+
+		keys = {
+			{
+				"<leader>ff",
+				function()
+					telescope_builtin().find_files()
+				end,
+				desc = "Find Files",
+			},
+			{
+				"<leader>f.",
+				function()
+					telescope_builtin().find_files({ cwd = current_file_dir() })
+				end,
+				desc = "Find Nearby Files",
+			},
+			{
+				"<leader>fF",
+				function()
+					telescope_builtin().find_files({
+						hidden = true,
+						no_ignore = true,
+						no_ignore_parent = true,
+					})
+				end,
+				desc = "Find All Files",
+			},
+			{
+				"<leader>fB",
+				function()
+					telescope_builtin().current_buffer_fuzzy_find()
+				end,
+				desc = "Fuzzy Buffer",
+			},
+			{
+				"<leader>fg",
+				function()
+					telescope_builtin().live_grep()
+				end,
+				desc = "Live Grep",
+			},
+			{
+				"<leader>fb",
+				function()
+					telescope_builtin().buffers()
+				end,
+				desc = "Buffers",
+			},
+			{
+				"<leader>fr",
+				function()
+					telescope_builtin().oldfiles()
+				end,
+				desc = "Recent Files",
+			},
+			{
+				"<leader>fh",
+				function()
+					telescope_builtin().help_tags()
+				end,
+				desc = "Help",
+			},
+			{
+				"<leader>f:",
+				function()
+					telescope_builtin().commands()
+				end,
+				desc = "Commands",
+			},
+			{
+				"<leader>fk",
+				function()
+					telescope_builtin().keymaps()
+				end,
+				desc = "Keymaps",
+			},
+			{
+				"<leader>fc",
+				function()
+					telescope_lsp().workspace_symbols({
+						symbols = { "class", "interface", "enum", "struct", "type" },
+					})
+				end,
+				desc = "Find Class",
+			},
+			{
+				"<leader>fm",
+				function()
+					telescope_lsp().workspace_symbols({
+						symbols = { "method", "function", "constructor" },
+					})
+				end,
+				desc = "Find Method",
+			},
+			{
+				"<leader>fs",
+				function()
+					telescope_lsp().document_symbols()
+				end,
+				desc = "Document Symbols",
+			},
+			{
+				"<leader>fS",
+				function()
+					telescope_lsp().workspace_symbols()
+				end,
+				desc = "Workspace Symbols",
+			},
+			{
+				"<leader>fT",
+				function()
+					telescope_lsp().type_definitions()
+				end,
+				desc = "Find Type",
+			},
+			{
+				"<leader>fR",
+				function()
+					telescope_lsp().references()
+				end,
+				desc = "Find References",
+			},
+			{
+				"<leader>fI",
+				function()
+					telescope_lsp().implementations()
+				end,
+				desc = "Find Implementations",
+			},
+			{
+				"<leader>fd",
+				function()
+					telescope_builtin().diagnostics()
+				end,
+				desc = "Diagnostics",
+			},
+			{
+				"<leader>fw",
+				function()
+					telescope_builtin().grep_string()
+				end,
+				desc = "Find Word Under Cursor",
+			},
+		},
 	},
 }

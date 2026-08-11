@@ -73,7 +73,29 @@ Oil.nvim file browser (flat directory listing, not a tree):
 
 ### Find — `<leader>f`
 
-Telescope: files, live grep, buffers, recents, help, commands, keymaps, LSP symbols, diagnostics.
+Press `<Space>f` to open the Find menu in which-key.
+
+| Key | Action |
+|-----|--------|
+| `<leader>ff` | Find files (project) |
+| `<leader>f.` | Find files near current file |
+| `<leader>fF` | Find all files (including ignored/hidden) |
+| `<leader>fB` | Fuzzy find in current buffer |
+| `<leader>fg` | Live grep |
+| `<leader>fb` | Buffers |
+| `<leader>fr` | Recent files |
+| `<leader>fc` | Find class (workspace symbols) |
+| `<leader>fm` | Find method (workspace symbols) |
+| `<leader>fs` | Document symbols (current file) |
+| `<leader>fS` | Workspace symbols (all kinds) |
+| `<leader>fT` | Find type definition (picker) |
+| `<leader>fR` | Find references (picker) |
+| `<leader>fI` | Find implementations (picker) |
+| `<leader>fw` | Find word under cursor |
+| `<leader>fd` | Diagnostics |
+| `<leader>fh` | Help tags |
+| `<leader>fk` | Keymaps |
+| `<leader>f:` | Commands |
 
 ### Git — `<leader>g`
 
@@ -91,6 +113,8 @@ Active in PHP/Blade projects and on `composer.json`. Requires a Laravel project 
 | `<leader>lm` | Make generators |
 | `<leader>lt` | Code actions |
 | `<leader>lu` | Artisan Hub |
+| `<leader>lf` | Related files (model, migration, …) |
+| `<leader>lv` | View finder |
 | `<C-g>` | View finder |
 
 Run `:checkhealth laravel` to verify setup (plugin loads on startup via VeryLazy).
@@ -115,7 +139,7 @@ Auto-detects projects via `sdkconfig` / `CMakeLists.txt` + `main/`.
 | Key | Action |
 |-----|--------|
 | `gd` / `gD` | Go to definition / declaration |
-| `gr` / `gi` | References / implementation |
+| `gr` / `gi` / `gt` | References / implementation / type definition |
 | `K` | Hover |
 | `<leader>cr` | Rename |
 | `<leader>ca` | Code action |

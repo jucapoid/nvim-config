@@ -63,6 +63,20 @@ return {
 				desc = "Resources Picker",
 			},
 			{
+				"<leader>lf",
+				function()
+					laravel().pickers.related()
+				end,
+				desc = "Related Files",
+			},
+			{
+				"<leader>lv",
+				function()
+					laravel().commands.run("view:finder")
+				end,
+				desc = "View Finder",
+			},
+			{
 				"<leader>lt",
 				function()
 					laravel().commands.run("actions")
