@@ -19,7 +19,9 @@ local function with_project(fn)
 end
 
 function M.build()
-	vim.cmd.make()
+	with_project(function(project)
+		project:build()
+	end)
 end
 
 function M.flash()

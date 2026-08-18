@@ -18,11 +18,23 @@ function Project.new(root)
 end
 
 function Project:setup(bufnr)
-	bufnr = bufnr or 0
+	bufnr = bufnr or vim.api.nvim_get_current_buf()
+	if bufnr == 0 then
+		bufnr = vim.api.nvim_get_current_buf()
+	end
+
 	vim.bo[bufnr].makeprg = "idf.py build"
+	vim.bo[bufnr].errorformat = table.concat({
+		[[%f:%l:%c: error: %m]],
+		[[%f:%l:%c: warning: %m]],
+		[[%f:%l: error: %m]],
+		[[%f:%l: warning: %m]],
+	}, ",")
 end
 
 function Project:build()
+	self:setup()
+	vim.cmd.lcd({ args = { self.root }, mods = { silent = true } })
 	vim.cmd.make()
 end
 
