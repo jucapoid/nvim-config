@@ -2,6 +2,8 @@
 
 A modular Neovim setup built with [lazy.nvim](https://github.com/folke/lazy.nvim), focused on general development (C/C++, Lua, PHP, Python, JS/TS) with custom workflows for **ESP-IDF** embedded work and **Laravel** PHP projects.
 
+**Quick reference:** [CHEATSHEET.md](CHEATSHEET.md)
+
 **Leader key:** `<Space>`
 
 Press `<Space>` and wait briefly to see all key groups via which-key.
