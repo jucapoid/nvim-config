@@ -15,9 +15,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		bufmap("K", vim.lsp.buf.hover, "Hover")
 		bufmap("<leader>cr", vim.lsp.buf.rename, "Rename")
 		bufmap("<leader>ca", vim.lsp.buf.code_action, "Code Action")
-		bufmap("<leader>cf", function()
-			require("conform").format({ bufnr = event.buf, async = false, lsp_fallback = true })
-		end, "Format Buffer")
 	end,
 })
 

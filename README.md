@@ -1,6 +1,6 @@
 # Neovim Configuration
 
-A modular Neovim setup built with [lazy.nvim](https://github.com/folke/lazy.nvim), focused on general development (C/C++, Lua, PHP, Python, JS/TS) with custom workflows for **ESP-IDF** embedded work and **Laravel** PHP projects.
+A modular Neovim setup built with [lazy.nvim](https://github.com/folke/lazy.nvim), focused on general development (C/C++, Lua, PHP, Python, JS/TS) with a custom **ESP-IDF** embedded workflow.
 
 **Leader key:** `<Space>`
 
@@ -13,14 +13,14 @@ init.lua
 ├── config/options.lua       Editor defaults (numbers, tabs, clipboard, …)
 ├── config/keymaps.lua       Global keymaps (git, ESP-IDF, terminal)
 ├── config/lazy.lua          Plugin manager bootstrap
-├── config/autocmds.lua      Autocommands (yank highlight)
+├── config/autocmds.lua      Autocommands (yank highlight, terminal keys)
 ├── config/diagnostics.lua   Diagnostic signs and UI
 ├── config/lsp.lua           LSP attach keymaps and diagnostic navigation
 ├── config/dap.lua           C/C++ debugging (codelldb)
-├── lua/plugins/*.lua        Plugin specs (11 files, auto-imported)
+├── lua/plugins/*.lua        Plugin specs (auto-imported)
 ├── lua/esp/*                ESP-IDF project detection and tooling
 ├── lua/tasks/*              Task terminal and runners
-└── after/lsp/               Per-server LSP overrides (clangd, intelephense)
+└── after/lsp/               Per-server LSP overrides (clangd)
 ```
 
 ## Plugins
@@ -35,13 +35,12 @@ init.lua
 | **Format / lint** | conform.nvim (format on save), nvim-lint |
 | **Debug** | nvim-dap, dap-ui, dap-virtual-text |
 | **UI / nav aids** | which-key, trouble.nvim, aerial.nvim, todo-comments |
-| **Laravel** | laravel.nvim (Artisan, routes, pickers, code actions) |
 
 ## Language support
 
-**LSP:** bash, clangd, css, html, intelephense (PHP/Blade), json, lua, pyright, ts_ls, yaml.
+**LSP:** bash, clangd, css, html, intelephense (PHP), json, lua, pyright, ts_ls, yaml.
 
-**Format on save:** stylua (Lua), clang-format (C/C++), pint (PHP), prettierd (web/JSON/YAML/markdown).
+**Format on save:** stylua (Lua), clang-format (C/C++), pint (PHP), prettierd (web/JSON/YAML/markdown). `<leader>cf` formats a visual selection, or the whole file when nothing is selected.
 
 **Lint:** selene, clangtidy, phpstan, eslint_d.
 
@@ -55,6 +54,20 @@ init.lua
 | `<leader>q` | Quit |
 | `<C-h/j/k/l>` | Window navigation |
 | `-` | Open parent directory (Oil) |
+
+### Terminal — `<leader>tt`
+
+Toggle a bottom terminal split. Opening it focuses your editor again; click the terminal pane and press `i` to type into the shell.
+
+| Situation | Keys | Action |
+|-----------|------|--------|
+| Typing in terminal | `Esc` | Leave terminal insert → normal mode in that pane |
+| Typing in terminal | `Ctrl-\` then `Ctrl-n` | Same (built-in default) |
+| Normal mode in terminal pane | `i` | Enter terminal insert again |
+| Normal mode in terminal pane | `q` or `<leader>tt` | Hide pane (shell keeps running) |
+| Window focus | `Ctrl-h/j/k/l` | Jump to another window (from terminal insert too) |
+
+Do **not** use `Ctrl-d` in an empty shell — that sends EOF and kills the session.
 
 ### Files — `<leader>n`
 
@@ -101,24 +114,6 @@ Press `<Space>f` to open the Find menu in which-key.
 
 Fugitive, Diffview, file/repo history, commit, blame. Buffer-local gitsigns hunk maps: `]h` / `[h`, `<leader>hs`, `<leader>hr`, `<leader>hp`.
 
-### Laravel — `<leader>l`
-
-Active in PHP/Blade projects and on `composer.json`. Requires a Laravel project root.
-
-| Key | Action |
-|-----|--------|
-| `<leader>ll` | Laravel picker |
-| `<leader>la` | Artisan commands |
-| `<leader>lr` | Routes |
-| `<leader>lm` | Make generators |
-| `<leader>lt` | Code actions |
-| `<leader>lu` | Artisan Hub |
-| `<leader>lf` | Related files (model, migration, …) |
-| `<leader>lv` | View finder |
-| `<C-g>` | View finder |
-
-Run `:checkhealth laravel` to verify setup (plugin loads on startup via VeryLazy).
-
 ### ESP-IDF — `<leader>e`
 
 Auto-detects projects via `sdkconfig` / `CMakeLists.txt` + `main/`.
@@ -163,19 +158,13 @@ Bottom terminal split for running shell commands scoped to the detected project 
 ## Getting started
 
 ```bash
-# First launch installs lazy.nvim and plugins automatically
 nvim
-
-# Inside Neovim
 :Lazy sync
-:MasonInstall intelephense   # if PHP support is needed
-:checkhealth laravel         # verify Laravel integration
+:checkhealth vim.lsp
 ```
 
 ## Requirements
 
 - Neovim ≥ 0.10
-- `ripgrep` (Telescope, Laravel view finder)
-- `jq` (optional, Laravel config display)
-- Writable `vendor/` in Laravel projects (laravel.nvim introspection)
+- `ripgrep` (Telescope)
 - ESP-IDF toolchain on `$PATH` for embedded workflow
