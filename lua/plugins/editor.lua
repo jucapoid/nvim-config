@@ -16,33 +16,36 @@ return {
   ------------------------------------------------------------------------------
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = {
-          "bash",
-          "c",
-          "html",
-          "javascript",
-          "json",
-          "lua",
-          "markdown",
-          "php",
-          "python",
-          "tsx",
-          "typescript",
-          "vim",
-          "yaml",
-          "blade",
-        },
+      local languages = {
+        "bash",
+        "c",
+        "html",
+        "javascript",
+        "json",
+        "lua",
+        "markdown",
+        "php",
+        "python",
+        "tsx",
+        "typescript",
+        "vim",
+        "yaml",
+        "blade",
+      }
 
-        highlight = {
-          enable = true,
-        },
+      -- Rewrite on the main branch: no nvim-treesitter.configs module.
+      require("nvim-treesitter").install(languages)
 
-        indent = {
-          enable = true,
-        },
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = languages,
+        callback = function()
+          vim.treesitter.start()
+          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
       })
     end,
   },
